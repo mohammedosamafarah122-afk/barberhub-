@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Barber Shop - Book Your Appointment</title>
+    <link rel="stylesheet" href="shop-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-cut"></i>
+                <span>Elite Barber Shop</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-arrow-left"></i> Back to Platform
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#services" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#gallery" class="nav-link">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#booking" class="nav-link booking-btn">Book Now</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Professional Barber Services</h1>
+            <p class="hero-subtitle">Experience the finest in men's grooming with our expert barbers and premium services</p>
+            <div class="hero-buttons">
+                <a href="#booking" class="btn btn-primary">Book Appointment</a>
+                <a href="#services" class="btn btn-secondary">Our Services</a>
+            </div>
+            <div class="hero-info">
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Mon-Sat: 9AM-7PM, Sun: 10AM-5PM</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-star"></i>
+                    <span>4.8★ (156 reviews)</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="barber-chair"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>About Elite Barber</h2>
+                <p>Your trusted destination for premium grooming services</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Traditional Craftsmanship, Modern Style</h3>
+                    <p>For over 15 years, Elite Barber has been providing exceptional grooming services to gentlemen who appreciate quality and attention to detail. Our skilled barbers combine traditional techniques with contemporary styles to deliver the perfect look for every client.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-award"></i>
+                            <h4>Expert Barbers</h4>
+                            <p>Licensed professionals with years of experience</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-clock"></i>
+                            <h4>Flexible Hours</h4>
+                            <p>Open 7 days a week to fit your schedule</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <h4>Premium Products</h4>
+                            <p>Only the finest grooming products and tools</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Services</h2>
+                <p>Professional grooming services tailored to your needs</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h3>Haircut & Styling</h3>
+                    <p>Professional haircuts with precision styling and finishing touches</p>
+                    <div class="service-price">$25</div>
+                    <div class="service-duration">45 min</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Beard Trim</h3>
+                    <p>Expert beard trimming and shaping for a clean, polished look</p>
+                    <div class="service-price">$15</div>
+                    <div class="service-duration">30 min</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3>Hot Towel Shave</h3>
+                    <p>Traditional hot towel shave with premium shaving products</p>
+                    <div class="service-price">$30</div>
+                    <div class="service-duration">40 min</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Hair Wash & Style</h3>
+                    <p>Complete hair wash with professional styling and products</p>
+                    <div class="service-price">$20</div>
+                    <div class="service-duration">30 min</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Premium Package</h3>
+                    <p>Complete grooming experience with haircut, beard trim, and styling</p>
+                    <div class="service-price">$45</div>
+                    <div class="service-duration">75 min</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>VIP Treatment</h3>
+                    <p>Luxury grooming package with premium products and extended service</p>
+                    <div class="service-price">$65</div>
+                    <div class="service-duration">90 min</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Work</h2>
+                <p>See the quality of our craftsmanship</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="Screenshot 2025-10-07 182953.png" alt="Classic Cut" class="gallery-photo" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/placeholder.svg';" />
+                </div>
+                <div class="gallery-item">
+                    <img src="Screenshot 2025-10-07 194954.png" alt="Modern Style" class="gallery-photo" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/placeholder.svg';" />
+                </div>
+                <div class="gallery-item">
+                    <img src="Screenshot 2025-10-07 200903.png" alt="Beard Trim" class="gallery-photo" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/placeholder.svg';" />
+                </div>
+                <div class="gallery-item">
+                    <img src="Screenshot 2025-10-07 201247.png" alt="Hot Shave" class="gallery-photo" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/placeholder.svg';" />
+                </div>
+                <div class="gallery-item">
+                    <img src="Screenshot 2025-10-07 203615.png" alt="Styling" class="gallery-photo" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/placeholder.svg';" />
+                </div>
+                <div class="gallery-item">
+                    <img src="Screenshot 2025-10-07 204517.png" alt="VIP Service" class="gallery-photo" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/placeholder.svg';" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="booking">
+        <div class="container">
+            <div class="section-header">
+                <h2>Book Your Appointment</h2>
+                <p>Schedule your visit with our expert barbers</p>
+            </div>
+            <div class="booking-content">
+                <div class="booking-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <span>Select Service</span>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <span>Choose Date & Time</span>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <span>Your Details</span>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <span>Confirm</span>
+                    </div>
+                </div>
+                <div class="booking-form-container">
+                    <form class="booking-form" id="bookingForm">
+                        <!-- Step 1: Service Selection -->
+                        <div class="booking-step active" id="step1">
+                            <h3>Select a Service</h3>
+                            <div class="service-selection">
+                                <div class="service-option" data-service="haircut" data-price="25" data-duration="45">
+                                    <div class="service-info">
+                                        <h4>Haircut & Styling</h4>
+                                        <p>Professional haircuts with precision styling</p>
+                                        <div class="service-meta">
+                                            <span class="duration">45 min</span>
+                                            <span class="price">$25</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="service-option" data-service="beard" data-price="15" data-duration="30">
+                                    <div class="service-info">
+                                        <h4>Beard Trim</h4>
+                                        <p>Expert beard trimming and shaping</p>
+                                        <div class="service-meta">
+                                            <span class="duration">30 min</span>
+                                            <span class="price">$15</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="service-option" data-service="shave" data-price="30" data-duration="40">
+                                    <div class="service-info">
+                                        <h4>Hot Towel Shave</h4>
+                                        <p>Traditional hot towel shave</p>
+                                        <div class="service-meta">
+                                            <span class="duration">40 min</span>
+                                            <span class="price">$30</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="service-option" data-service="premium" data-price="45" data-duration="75">
+                                    <div class="service-info">
+                                        <h4>Premium Package</h4>
+                                        <p>Complete grooming experience</p>
+                                        <div class="service-meta">
+                                            <span class="duration">75 min</span>
+                                            <span class="price">$45</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
+                        </div>
+
+                        <!-- Step 2: Date & Time Selection -->
+                        <div class="booking-step" id="step2">
+                            <h3>Choose Date & Time</h3>
+                            <div class="date-time-selection">
+                                <div class="date-picker">
+                                    <label>Select Date</label>
+                                    <input type="date" id="bookingDate" required>
+                                </div>
+                                <div class="time-slots">
+                                    <label>Available Times</label>
+                                    <div class="time-grid" id="timeGrid">
+                                        <!-- Time slots will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step-actions">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Customer Details -->
+                        <div class="booking-step" id="step3">
+                            <h3>Your Details</h3>
+                            <div class="form-group">
+                                <input type="text" placeholder="Full Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" placeholder="Email Address" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" placeholder="Phone Number" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea placeholder="Special requests or notes (optional)" rows="3"></textarea>
+                            </div>
+                            <div class="step-actions">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Confirmation -->
+                        <div class="booking-step" id="step4">
+                            <h3>Confirm Your Booking</h3>
+                            <div class="booking-summary">
+                                <div class="summary-item">
+                                    <span>Service:</span>
+                                    <span id="selectedService">Haircut & Styling</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Date:</span>
+                                    <span id="selectedDate">December 20, 2024</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Time:</span>
+                                    <span id="selectedTime">2:30 PM</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Duration:</span>
+                                    <span id="selectedDuration">45 minutes</span>
+                                </div>
+                                <div class="summary-item total">
+                                    <span>Total:</span>
+                                    <span id="selectedPrice">$25</span>
+                                </div>
+                            </div>
+                            <div class="step-actions">
+                                <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                                <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Visit Us</h2>
+                <p>Come experience the Elite Barber difference</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Get In Touch</h3>
+                    <p>Ready for your next grooming session? Contact us today to book your appointment or ask any questions about our services.</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>(555) 123-4567</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@elitebarber.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>123 Main Street, New York, NY 10001</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Mon-Sat: 9AM-7PM, Sun: 10AM-5PM</span>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <p>Interactive Map</p>
+                    <small>123 Main Street, New York, NY 10001</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-cut"></i>
+                        <span>Elite Barber Shop</span>
+                    </div>
+                    <p>Professional grooming services for the modern gentleman.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#services">Haircut & Styling</a></li>
+                        <li><a href="#services">Beard Trim</a></li>
+                        <li><a href="#services">Hot Towel Shave</a></li>
+                        <li><a href="#services">Premium Packages</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@elitebarber.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, New York, NY</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Elite Barber Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="shop-data.js"></script>
+    <script src="shop-script.js"></script>
+</body>
+</html>

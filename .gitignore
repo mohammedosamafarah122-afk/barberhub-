@@ -1,0 +1,34 @@
+# Supabase credentials
+# Note: For GitHub Pages, you'll need to commit supabase-config.js
+# The anon key is public-safe, but uncomment the line below for extra privacy
+# supabase-config.js
+
+# Node modules (if using npm)
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+
