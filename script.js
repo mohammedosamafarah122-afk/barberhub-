@@ -4,14 +4,22 @@ let currentShop = null;
 
 // Initialize platform
 document.addEventListener('DOMContentLoaded', function() {
+    // Auth gate: if no user session, go to dedicated auth page
+    const isAuthPage = /auth\.html$/i.test(window.location.pathname);
+    const hasSession = !!localStorage.getItem('barberhub_user');
+    if (!hasSession && !isAuthPage) {
+        window.location.replace('auth.html');
+        return;
+    }
+
+    // If we are on auth page and already logged in, go to main platform
+    if (hasSession && isAuthPage) {
+        window.location.replace('index.html');
+        return;
+    }
+
     initializePlatform();
     loadShopsFromManager();
-    // Open login modal immediately so auth is the first thing users see
-    setTimeout(() => {
-        if (typeof showLoginModal === 'function') {
-            showLoginModal();
-        }
-    }, 250);
 });
 
 // Platform initialization
@@ -128,15 +136,10 @@ function handleLogin(event) {
         localStorage.setItem('barberhub_user', JSON.stringify(currentUser));
         localStorage.setItem('barberhub_current_shop', JSON.stringify(currentShop));
         
-        showNotification('Login successful! Opening your shop...', 'success');
+        showNotification('Login successful! Entering platform...', 'success');
         setTimeout(() => {
-            // Navigate to the user's shop page instead of dashboard
-            if (currentShop && currentShop.id) {
-                window.location.href = `shop.html?id=${currentShop.id}`;
-            } else {
-                window.location.href = 'shop.html';
-            }
-        }, 1200);
+            window.location.href = 'index.html';
+        }, 800);
     } else {
         showNotification('Please fill in all fields', 'error');
     }
@@ -209,15 +212,10 @@ function handleRegister(event) {
     localStorage.setItem('barberhub_user', JSON.stringify(currentUser));
     localStorage.setItem('barberhub_current_shop', JSON.stringify(currentShop));
     
-    showNotification('Shop created successfully! Opening your shop...', 'success');
+    showNotification('Account created! Entering platform...', 'success');
     setTimeout(() => {
-        // Navigate to the new shop page instead of dashboard
-        if (currentShop && currentShop.id) {
-            window.location.href = `shop.html?id=${currentShop.id}`;
-        } else {
-            window.location.href = 'shop.html';
-        }
-    }, 1200);
+        window.location.href = 'index.html';
+    }, 800);
 }
 
 // Generate default logo based on shop name

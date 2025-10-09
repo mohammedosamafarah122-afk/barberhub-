@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarberHub - Sign In / Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-cut"></i>
+                <span>BarberHub</span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="features" style="padding-top:120px">
+        <div class="container" style="max-width:560px">
+            <div class="section-header" style="margin-bottom:30px">
+                <h2>Welcome back</h2>
+                <p>Login to your account or create a new shop</p>
+            </div>
+
+            <div class="services-grid" style="grid-template-columns:1fr">
+                <div class="service-card">
+                    <h3 style="margin-bottom:10px">Login</h3>
+                    <form class="auth-form" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <input type="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+                    </form>
+                </div>
+
+                <div class="service-card">
+                    <h3 style="margin-bottom:10px">Create Your Shop</h3>
+                    <form class="auth-form" onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <input type="text" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Shop Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Location/City" required>
+                        </div>
+                        <div class="form-group">
+                            <select required>
+                                <option value="">Select Plan</option>
+                                <option value="starter">Starter - $29/month</option>
+                                <option value="professional">Professional - $59/month</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%">Create Shop</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="shop-data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
