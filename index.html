@@ -8,6 +8,15 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <script>
+        // Hard auth gate: redirect to auth before rendering if no session
+        try {
+            var hasSession = !!localStorage.getItem('barberhub_user');
+            if (!hasSession && !/auth\.html$/i.test(location.pathname)) {
+                location.replace('auth.html');
+            }
+        } catch (e) {}
+    </script>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
