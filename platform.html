@@ -302,9 +302,19 @@
             window.location.href = 'index.html';
         }
 
-        // Initialize
-        loadUserInfo();
-        loadShops();
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('barberhub_user');
+            if (!currentUser) {
+                // User is not logged in, redirect to login
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Initialize platform
+            loadUserInfo();
+            loadShops();
+        });
     </script>
 </body>
 </html>

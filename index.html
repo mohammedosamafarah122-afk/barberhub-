@@ -154,6 +154,15 @@
     </div>
 
     <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('barberhub_user');
+            if (currentUser) {
+                // User is already logged in, redirect to platform
+                window.location.href = 'platform.html';
+            }
+        });
+
         // Tab switching
         function switchTab(tab) {
             // Update tab buttons
