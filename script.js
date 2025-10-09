@@ -6,6 +6,12 @@ let currentShop = null;
 document.addEventListener('DOMContentLoaded', function() {
     initializePlatform();
     loadShopsFromManager();
+    // Open login modal immediately so auth is the first thing users see
+    setTimeout(() => {
+        if (typeof showLoginModal === 'function') {
+            showLoginModal();
+        }
+    }, 250);
 });
 
 // Platform initialization
@@ -122,10 +128,15 @@ function handleLogin(event) {
         localStorage.setItem('barberhub_user', JSON.stringify(currentUser));
         localStorage.setItem('barberhub_current_shop', JSON.stringify(currentShop));
         
-        showNotification('Login successful! Redirecting to dashboard...', 'success');
+        showNotification('Login successful! Opening your shop...', 'success');
         setTimeout(() => {
-            window.location.href = 'dashboard.html';
-        }, 1500);
+            // Navigate to the user's shop page instead of dashboard
+            if (currentShop && currentShop.id) {
+                window.location.href = `shop.html?id=${currentShop.id}`;
+            } else {
+                window.location.href = 'shop.html';
+            }
+        }, 1200);
     } else {
         showNotification('Please fill in all fields', 'error');
     }
@@ -198,10 +209,15 @@ function handleRegister(event) {
     localStorage.setItem('barberhub_user', JSON.stringify(currentUser));
     localStorage.setItem('barberhub_current_shop', JSON.stringify(currentShop));
     
-    showNotification('Shop created successfully! Redirecting to dashboard...', 'success');
+    showNotification('Shop created successfully! Opening your shop...', 'success');
     setTimeout(() => {
-        window.location.href = 'dashboard.html';
-    }, 1500);
+        // Navigate to the new shop page instead of dashboard
+        if (currentShop && currentShop.id) {
+            window.location.href = `shop.html?id=${currentShop.id}`;
+        } else {
+            window.location.href = 'shop.html';
+        }
+    }, 1200);
 }
 
 // Generate default logo based on shop name
