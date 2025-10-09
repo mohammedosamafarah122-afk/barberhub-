@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Barber Shops - BarberHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-cut"></i>
+                <span>BarberHub</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="auth.html" class="nav-link">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="shops" style="padding-top:100px">
+        <div class="container">
+            <div class="section-header">
+                <h2>Find a Barber Shop</h2>
+                <p>Search by location, filter by services, and book instantly</p>
+            </div>
+            <div class="shop-search">
+                <div class="search-bar" style="max-width:800px">
+                    <input type="text" placeholder="Enter location or zip" id="discoverLocation">
+                    <input type="text" placeholder="Service (e.g. fade, beard)" id="discoverService" style="flex:1">
+                    <button class="btn btn-primary" id="discoverSearchBtn"><i class="fas fa-search"></i> Search</button>
+                </div>
+            </div>
+            <div id="discoverSkeleton" class="shops-grid"></div>
+            <div id="discoverGrid" class="shops-grid" style="display:none"></div>
+        </div>
+    </section>
+
+    <script src="shop-data.js"></script>
+    <script>
+    // Simple fast discover implementation (local data manager)
+    const grid = document.getElementById('discoverGrid');
+    const skeleton = document.getElementById('discoverSkeleton');
+
+    function renderSkeleton(count = 6) {
+        const card = () => `
+            <div class="shop-card" style="opacity:.6">
+                <div class="shop-header">
+                    <div class="shop-avatar"></div>
+                    <div class="shop-info">
+                        <h3 style="background:#eee;height:16px;width:160px;border-radius:6px"></h3>
+                        <p style="background:#eee;height:12px;width:120px;border-radius:6px;margin-top:6px"></p>
+                    </div>
+                </div>
+                <div class="shop-services">
+                    <h4>Services</h4>
+                    <div class="service-tags">
+                        <span class="service-tag">Loading</span>
+                        <span class="service-tag">Loading</span>
+                    </div>
+                </div>
+                <div class="shop-actions">
+                    <button class="btn btn-primary btn-sm" disabled>View Shop</button>
+                    <button class="btn btn-outline btn-sm" disabled>Book Now</button>
+                </div>
+            </div>`;
+        skeleton.innerHTML = Array.from({length:count}).map(card).join('');
+        skeleton.style.display = 'grid';
+        grid.style.display = 'none';
+    }
+
+    async function renderShops(list) {
+        grid.innerHTML = list.map(shop => `
+            <div class="shop-card" style="border-left:4px solid ${shop.colorScheme?.primary || '#d4af37'}">
+                <div class="shop-header">
+                    <div class="shop-avatar" style="background: linear-gradient(45deg, ${shop.colorScheme?.primary || '#d4af37'}, ${shop.colorScheme?.secondary || '#f4d03f'})">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <div class="shop-info">
+                        <h3>${shop.name}</h3>
+                        <p>${(shop.address||'').split(',')[0]}</p>
+                    </div>
+                </div>
+                <div class="shop-services">
+                    <h4>Services</h4>
+                    <div class="service-tags">
+                        ${(shop.services||[]).slice(0,3).map(s=>`<span class="service-tag">${s.name}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="shop-actions">
+                    <a class="btn btn-primary btn-sm" href="shop.html?id=${shop.id}">View Shop</a>
+                    <a class="btn btn-outline btn-sm" href="shop.html?id=${shop.id}#booking">Book Now</a>
+                </div>
+            </div>`).join('');
+        skeleton.style.display = 'none';
+        grid.style.display = 'grid';
+    }
+
+    async function performSearch() {
+        renderSkeleton();
+        const term = (document.getElementById('discoverLocation').value + ' ' + document.getElementById('discoverService').value).trim();
+        // Using local data manager for now
+        const all = (window.shopManager?.getAllShops && window.shopManager.getAllShops()) || [];
+        // If getAllShops returns Promise (older code is sync), normalize
+        const list = Array.isArray(all) ? all : await all;
+        const filtered = term ? list.filter(s =>
+            (s.name||'').toLowerCase().includes(term.toLowerCase()) ||
+            (s.address||'').toLowerCase().includes(term.toLowerCase()) ||
+            (s.description||'').toLowerCase().includes(term.toLowerCase()) ||
+            (s.services||[]).some(x => x.name.toLowerCase().includes(term.toLowerCase()))
+        ) : list;
+        await renderShops(filtered);
+    }
+
+    document.getElementById('discoverSearchBtn').addEventListener('click', performSearch);
+    // initial load
+    renderSkeleton();
+    performSearch();
+    </script>
+</body>
+</html>
+
