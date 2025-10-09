@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarberHub - Welcome</title>
+    <title>BarberHub - Login or Sign Up</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,9 +17,6 @@
                 <i class="fas fa-cut"></i>
                 <span>BarberHub</span>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a class="nav-link" href="discover.html">Find Shops</a></li>
-            </ul>
         </div>
     </nav>
 
@@ -27,21 +24,21 @@
         <div class="container">
             <div class="section-header" style="text-align:center;margin-bottom:50px">
                 <h1 style="font-size:3rem;margin-bottom:20px">Welcome to BarberHub</h1>
-                <p style="font-size:1.3rem;color:#666">Your platform for discovering barber shops and managing your own</p>
+                <p style="font-size:1.3rem;color:#666">Login or create an account to continue</p>
             </div>
 
-            <div class="services-grid" style="grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:40px;max-width:900px;margin:0 auto">
+            <div class="services-grid" style="grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:40px;max-width:900px;margin:0 auto">
                 <div class="service-card" style="padding:40px">
                     <div style="text-align:center;margin-bottom:30px">
                         <i class="fas fa-sign-in-alt" style="font-size:3rem;color:#d4af37"></i>
                     </div>
                     <h3 style="margin-bottom:20px;text-align:center;font-size:1.5rem">Login</h3>
-                    <form class="auth-form" onsubmit="handleLogin(event)">
+                    <form class="auth-form" onsubmit="handleLogin(event); return false;">
                         <div class="form-group">
-                            <input type="email" placeholder="Email" required>
+                            <input type="email" name="email" placeholder="Email" required>
                         </div>
                         <div class="form-group">
-                            <input type="password" placeholder="Password" required>
+                            <input type="password" name="password" placeholder="Password" required>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
                     </form>
@@ -49,33 +46,20 @@
 
                 <div class="service-card" style="padding:40px;border:2px solid #d4af37">
                     <div style="text-align:center;margin-bottom:30px">
-                        <i class="fas fa-store" style="font-size:3rem;color:#d4af37"></i>
+                        <i class="fas fa-user-plus" style="font-size:3rem;color:#d4af37"></i>
                     </div>
-                    <h3 style="margin-bottom:20px;text-align:center;font-size:1.5rem">Create Your Shop</h3>
-                    <form class="auth-form" onsubmit="handleRegister(event)">
+                    <h3 style="margin-bottom:20px;text-align:center;font-size:1.5rem">Sign Up</h3>
+                    <form class="auth-form" onsubmit="handleSignup(event); return false;">
                         <div class="form-group">
-                            <input type="text" placeholder="Full Name" required>
+                            <input type="text" name="name" placeholder="Full Name" required>
                         </div>
                         <div class="form-group">
-                            <input type="email" placeholder="Email" required>
+                            <input type="email" name="email" placeholder="Email" required>
                         </div>
                         <div class="form-group">
-                            <input type="password" placeholder="Password" required>
+                            <input type="password" name="password" placeholder="Password" required>
                         </div>
-                        <div class="form-group">
-                            <input type="text" placeholder="Shop Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" placeholder="Location/City" required>
-                        </div>
-                        <div class="form-group">
-                            <select required>
-                                <option value="">Select Plan</option>
-                                <option value="starter">Starter - $29/month</option>
-                                <option value="professional">Professional - $59/month</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width:100%">Create Shop</button>
+                        <button type="submit" class="btn btn-primary" style="width:100%">Sign Up</button>
                     </form>
                 </div>
             </div>

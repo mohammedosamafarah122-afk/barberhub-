@@ -120,34 +120,86 @@ function switchAuthModal() {
 // Authentication handlers
 function handleLogin(event) {
     event.preventDefault();
-    const formData = new FormData(event.target);
-    const email = event.target.querySelector('input[type="email"]').value;
-    const password = event.target.querySelector('input[type="password"]').value;
+    const email = event.target.querySelector('input[name="email"]').value;
+    const password = event.target.querySelector('input[name="password"]').value;
     
-    // Simulate login
+    // Simulate login - check if user exists
     if (email && password) {
-        currentUser = {
-            id: 1,
-            name: 'John Barber',
-            email: email,
-            role: 'owner'
-        };
+        // Try to find existing user in localStorage
+        const storedUsers = JSON.parse(localStorage.getItem('barberhub_users') || '[]');
+        const user = storedUsers.find(u => u.email === email);
         
-        // Get the user's shop from shop manager
-        const userShops = shopManager.getAllShops().filter(shop => shop.owner === currentUser.name);
-        currentShop = userShops.length > 0 ? userShops[0] : shopManager.getShop(1);
-        
-        // Store user session
-        localStorage.setItem('barberhub_user', JSON.stringify(currentUser));
-        localStorage.setItem('barberhub_current_shop', JSON.stringify(currentShop));
-        
-        showNotification('Login successful! Entering platform...', 'success');
-        setTimeout(() => {
-            window.location.href = 'platform.html';
-        }, 800);
+        if (user) {
+            currentUser = user;
+            
+            // Get the user's shop from shop manager
+            const userShops = shopManager.getAllShops().filter(shop => shop.email === email);
+            currentShop = userShops.length > 0 ? userShops[0] : null;
+            
+            // Store user session
+            localStorage.setItem('barberhub_user', JSON.stringify(currentUser));
+            if (currentShop) {
+                localStorage.setItem('barberhub_current_shop', JSON.stringify(currentShop));
+            }
+            
+            showNotification('Login successful! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'discover.html';
+            }, 800);
+        } else {
+            showNotification('Invalid email or password', 'error');
+        }
     } else {
         showNotification('Please fill in all fields', 'error');
     }
+}
+
+// New simplified signup handler
+function handleSignup(event) {
+    event.preventDefault();
+    const name = event.target.querySelector('input[name="name"]').value;
+    const email = event.target.querySelector('input[name="email"]').value;
+    const password = event.target.querySelector('input[name="password"]').value;
+    
+    // Basic validation
+    if (!name || !email || !password) {
+        showNotification('Please fill in all fields', 'error');
+        return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showNotification('Please enter a valid email address', 'error');
+        return;
+    }
+    
+    // Check if user already exists
+    const storedUsers = JSON.parse(localStorage.getItem('barberhub_users') || '[]');
+    if (storedUsers.find(u => u.email === email)) {
+        showNotification('Email already registered. Please login.', 'error');
+        return;
+    }
+    
+    // Create user
+    currentUser = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        role: 'customer'
+    };
+    
+    // Save to users list
+    storedUsers.push(currentUser);
+    localStorage.setItem('barberhub_users', JSON.stringify(storedUsers));
+    
+    // Store user session
+    localStorage.setItem('barberhub_user', JSON.stringify(currentUser));
+    
+    showNotification('Account created! Redirecting...', 'success');
+    setTimeout(() => {
+        window.location.href = 'discover.html';
+    }, 800);
 }
 
 function handleRegister(event) {
