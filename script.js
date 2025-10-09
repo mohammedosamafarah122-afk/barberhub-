@@ -6,14 +6,15 @@ let currentShop = null;
 document.addEventListener('DOMContentLoaded', function() {
     // Auth gate: if no user session, go to dedicated auth page
     const isAuthPage = /auth\.html$/i.test(window.location.pathname);
+    const isDiscoverPage = /discover\.html$/i.test(window.location.pathname);
     const hasSession = !!localStorage.getItem('barberhub_user');
-    if (!hasSession && !isAuthPage) {
+    if (!hasSession && !isAuthPage && !isDiscoverPage) {
         window.location.replace('auth.html');
         return;
     }
 
     // If we are on auth page and already logged in, go to main platform
-    if (hasSession && isAuthPage) {
+    if (hasSession && (isAuthPage)) {
         window.location.replace('index.html');
         return;
     }

@@ -8,27 +8,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <script>
-        // Auth-first: redirect only if no session
-        try {
-            var hasSession = !!localStorage.getItem('barberhub_user');
-            if (!hasSession && !/auth\.html$/i.test(location.pathname)) {
-                location.replace('auth.html');
-            }
-        } catch (e) {}
-    </script>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script>
-        // Vercel Speed Insights (no-build usage)
-        (function(){
-            var s=document.createElement('script');
-            s.defer=true;
-            s.src='https://unpkg.com/@vercel/speed-insights@1/dist/index.min.js';
-            document.head.appendChild(s);
-        })();
-    </script>
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
@@ -53,9 +35,6 @@
                 </li>
                 <li class="nav-item">
                     <a href="discover.html" class="nav-link">Find Shops</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#shops" class="nav-link">Find Shops</a>
                 </li>
                 <li class="nav-item">
                     <a href="#contact" class="nav-link">Contact</a>
