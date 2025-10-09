@@ -142,22 +142,20 @@ function updateShopContent() {
         heroTitle.textContent = `${currentShop.name} - Professional Barber Services`;
     }
 
-    // Update about section title
+    // Keep original About section headings as designed
     const aboutSectionHeader = document.querySelector('.about .section-header h2');
     if (aboutSectionHeader) {
-        aboutSectionHeader.textContent = `About ${currentShop.name}`;
+        aboutSectionHeader.textContent = 'About Elite Barber';
     }
 
-    // Update about section subtitle
     const aboutSectionSubtitle = document.querySelector('.about .section-header p');
     if (aboutSectionSubtitle) {
         aboutSectionSubtitle.textContent = 'Your trusted destination for premium grooming services';
     }
 
-    // Update about section main heading
     const aboutHeading = document.querySelector('.about-text h3');
     if (aboutHeading) {
-        aboutHeading.textContent = `Welcome to ${currentShop.name}`;
+        aboutHeading.textContent = 'Traditional Craftsmanship, Modern Style';
     }
 
     // Update about text description
