@@ -16,9 +16,7 @@
                 <span>BarberHub</span>
             </div>
             <ul class="nav-menu">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#" onclick="showLoginModal()">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="auth.html">Start Your Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html">Login / Sign Up</a></li>
             </ul>
         </div>
     </nav>
@@ -29,13 +27,37 @@
                 <h2>Discover Local Barber Shops</h2>
                 <p>Search and book appointments instantly</p>
             </div>
-            <div class="shop-search">
-                <div class="search-bar">
-                    <input type="text" placeholder="Enter your location or zip code" id="locationSearch">
+            <div class="shop-search" style="margin-bottom:20px">
+                <div class="search-bar" style="max-width:760px">
+                    <input type="text" placeholder="City / ZIP / Name" id="locationSearch">
                     <button class="btn btn-primary" onclick="searchShops()">
                         <i class="fas fa-search"></i> Search
                     </button>
                 </div>
+            </div>
+            <div class="shop-features-grid" style="margin-bottom:20px">
+                <div class="shop-feature" style="text-align:left">
+                    <h3 style="margin-bottom:10px;font-size:1rem">Services</h3>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                        <label><input type="checkbox" class="svc-filter" value="Haircut"> Haircut</label>
+                        <label><input type="checkbox" class="svc-filter" value="Beard"> Beard</label>
+                        <label><input type="checkbox" class="svc-filter" value="Shave"> Shave</label>
+                        <label><input type="checkbox" class="svc-filter" value="Styling"> Styling</label>
+                        <label><input type="checkbox" class="svc-filter" value="VIP"> VIP</label>
+                    </div>
+                </div>
+                <div class="shop-feature" style="text-align:left">
+                    <h3 style="margin-bottom:10px;font-size:1rem">Minimum Rating</h3>
+                    <select id="ratingFilter" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px">
+                        <option value="0">Any</option>
+                        <option value="4">4.0+</option>
+                        <option value="4.5">4.5+</option>
+                        <option value="4.8">4.8+</option>
+                    </select>
+                </div>
+            </div>
+            <div class="shop-search">
+                <small style="display:block;text-align:center;color:#666">Tip: Use filters above to refine results</small>
             </div>
             <div class="shops-grid" id="shopsGrid"></div>
         </div>

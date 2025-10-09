@@ -4,18 +4,22 @@ let currentShop = null;
 
 // Initialize platform
 document.addEventListener('DOMContentLoaded', function() {
-    // Auth gate: if no user session, go to dedicated auth page
-    const isAuthPage = /auth\.html$/i.test(window.location.pathname);
+    // Auth gate: if no user session and on platform page, redirect to index (auth landing)
+    const isPlatformPage = /platform\.html$/i.test(window.location.pathname);
     const isDiscoverPage = /discover\.html$/i.test(window.location.pathname);
+    const isShopPage = /shop\.html$/i.test(window.location.pathname);
+    const isIndexPage = /index\.html$/i.test(window.location.pathname) || window.location.pathname === '/' || window.location.pathname.endsWith('/');
     const hasSession = !!localStorage.getItem('barberhub_user');
-    if (!hasSession && !isAuthPage && !isDiscoverPage) {
-        window.location.replace('auth.html');
+    
+    // Redirect to index if no session and trying to access platform
+    if (!hasSession && (isPlatformPage)) {
+        window.location.replace('index.html');
         return;
     }
 
-    // If we are on auth page and already logged in, go to main platform
-    if (hasSession && (isAuthPage)) {
-        window.location.replace('index.html');
+    // If logged in and on index, go to platform
+    if (hasSession && isIndexPage && !isDiscoverPage && !isShopPage) {
+        window.location.replace('platform.html');
         return;
     }
 
@@ -139,7 +143,7 @@ function handleLogin(event) {
         
         showNotification('Login successful! Entering platform...', 'success');
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = 'platform.html';
         }, 800);
     } else {
         showNotification('Please fill in all fields', 'error');
@@ -215,7 +219,7 @@ function handleRegister(event) {
     
     showNotification('Account created! Entering platform...', 'success');
     setTimeout(() => {
-        window.location.href = 'index.html';
+        window.location.href = 'platform.html';
     }, 800);
 }
 
@@ -276,30 +280,37 @@ function generateDefaultServices(shopName) {
 
 // Shop search functionality
 function searchShops() {
-    const searchTerm = document.getElementById('locationSearch').value;
+    const searchTerm = document.getElementById('locationSearch')?.value || '';
     if (!searchTerm.trim()) {
-        showNotification('Please enter a location to search', 'error');
-        return;
+        // allow empty to show all
     }
-    
     const shopsGrid = document.getElementById('shopsGrid');
     if (!shopsGrid) return;
 
-    const searchResults = shopManager.searchShops(searchTerm);
-    
-    if (searchResults.length === 0) {
+    const ratingMin = parseFloat(document.getElementById('ratingFilter')?.value || '0');
+    const svcFilters = Array.from(document.querySelectorAll('.svc-filter:checked')).map(el => el.value.toLowerCase());
+
+    const all = shopManager.getAllShops();
+    const filtered = all.filter(shop => {
+        const matchesText = !searchTerm || shop.name.toLowerCase().includes(searchTerm.toLowerCase()) || shop.address.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesRating = (shop.rating || 0) >= ratingMin;
+        const hasServices = svcFilters.length === 0 || (shop.services || []).some(s => svcFilters.some(f => s.name.toLowerCase().includes(f)));
+        return matchesText && matchesRating && hasServices;
+    });
+
+    if (filtered.length === 0) {
         shopsGrid.innerHTML = `
             <div class="no-results">
                 <i class="fas fa-search"></i>
                 <h3>No shops found</h3>
-                <p>Try searching with different keywords or browse all shops</p>
+                <p>Adjust filters or search terms and try again</p>
                 <button class="btn btn-primary" onclick="loadShopsFromManager()">Show All Shops</button>
             </div>
         `;
         return;
     }
 
-    shopsGrid.innerHTML = searchResults.map(shop => `
+    shopsGrid.innerHTML = filtered.map(shop => `
         <div class="shop-card" style="border-left: 4px solid ${shop.colorScheme.primary}">
             <div class="shop-header">
                 <div class="shop-avatar" style="background: linear-gradient(45deg, ${shop.colorScheme.primary}, ${shop.colorScheme.secondary})">
