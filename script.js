@@ -202,6 +202,18 @@ function handleSignup(event) {
     }, 800);
 }
 
+// Logout handler - only removes session, not user data
+function handleLogout() {
+    // Remove only session data, keep users list
+    localStorage.removeItem('barberhub_user');
+    localStorage.removeItem('barberhub_current_shop');
+    
+    showNotification('Logged out successfully', 'success');
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 500);
+}
+
 function handleRegister(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
