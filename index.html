@@ -3,71 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarberHub - Login or Sign Up</title>
+    <title>BarberHub - Find & Book Barber Shops</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .auth-header h1 {
+            color: #1a1a1a;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .auth-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .auth-tab.active {
+            background: #d4af37;
+            color: white;
+        }
+        .auth-form {
+            display: none;
+        }
+        .auth-form.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+        .btn-auth {
+            width: 100%;
+            padding: 15px;
+            background: #d4af37;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btn-auth:hover {
+            background: #b8941f;
+        }
+        .user-type {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .user-type label {
+            display: inline-block;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .user-type input[type="radio"] {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <i class="fas fa-cut"></i>
-                <span>BarberHub</span>
-            </div>
-        </div>
-    </nav>
-
-    <section class="hero" style="min-height:100vh;display:flex;align-items:center;padding-top:80px">
-        <div class="container">
-            <div class="section-header" style="text-align:center;margin-bottom:50px">
-                <h1 style="font-size:3rem;margin-bottom:20px">Welcome to BarberHub</h1>
-                <p style="font-size:1.3rem;color:#666">Login or create an account to continue</p>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1><i class="fas fa-cut"></i> BarberHub</h1>
+                <p>Find & book barber shops near you</p>
             </div>
 
-            <div class="services-grid" style="grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:40px;max-width:900px;margin:0 auto">
-                <div class="service-card" style="padding:40px">
-                    <div style="text-align:center;margin-bottom:30px">
-                        <i class="fas fa-sign-in-alt" style="font-size:3rem;color:#d4af37"></i>
-                    </div>
-                    <h3 style="margin-bottom:20px;text-align:center;font-size:1.5rem">Login</h3>
-                    <form class="auth-form" onsubmit="handleLogin(event); return false;">
-                        <div class="form-group">
-                            <input type="email" name="email" placeholder="Email" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password" placeholder="Password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
-                    </form>
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+                <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event); return false;">
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
-
-                <div class="service-card" style="padding:40px;border:2px solid #d4af37">
-                    <div style="text-align:center;margin-bottom:30px">
-                        <i class="fas fa-user-plus" style="font-size:3rem;color:#d4af37"></i>
-                    </div>
-                    <h3 style="margin-bottom:20px;text-align:center;font-size:1.5rem">Sign Up</h3>
-                    <form class="auth-form" onsubmit="handleSignup(event); return false;">
-                        <div class="form-group">
-                            <input type="text" name="name" placeholder="Full Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" name="email" placeholder="Email" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password" placeholder="Password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width:100%">Sign Up</button>
-                    </form>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" required>
                 </div>
-            </div>
-        </div>
-    </section>
+                <button type="submit" class="btn-auth">Login</button>
+            </form>
 
-    <script src="shop-data.js"></script>
-    <script src="script.js"></script>
+            <!-- Signup Form -->
+            <form class="auth-form" id="signupForm" onsubmit="handleSignup(event); return false;">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="user-type">
+                    <label><input type="radio" name="userType" value="customer" checked> Customer</label>
+                    <label><input type="radio" name="userType" value="barber"> Barber Shop Owner</label>
+                </div>
+                <button type="submit" class="btn-auth">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + 'Form').classList.add('active');
+        }
+
+        // Simple auth functions
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[name="email"]').value;
+            const password = event.target.querySelector('input[name="password"]').value;
+            
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Check if user exists
+            const users = JSON.parse(localStorage.getItem('barberhub_users') || '[]');
+            const user = users.find(u => u.email === email);
+            
+            if (user) {
+                localStorage.setItem('barberhub_user', JSON.stringify(user));
+                alert('Login successful! Redirecting...');
+                window.location.href = 'platform.html';
+            } else {
+                alert('Invalid email or password');
+            }
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const name = event.target.querySelector('input[name="name"]').value;
+            const email = event.target.querySelector('input[name="email"]').value;
+            const password = event.target.querySelector('input[name="password"]').value;
+            const userType = event.target.querySelector('input[name="userType"]:checked').value;
+            
+            if (!name || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('barberhub_users') || '[]');
+            if (users.find(u => u.email === email)) {
+                alert('Email already registered. Please login.');
+                return;
+            }
+
+            // Create user
+            const user = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                role: userType
+            };
+
+            // Save user
+            users.push(user);
+            localStorage.setItem('barberhub_users', JSON.stringify(users));
+            localStorage.setItem('barberhub_user', JSON.stringify(user));
+
+            alert('Account created! Redirecting...');
+            window.location.href = 'platform.html';
+        }
+    </script>
 </body>
 </html>
 
