@@ -49,7 +49,26 @@
             </div>
         </div>
     </nav>
-
+    <!-- Find Shops Section -->
+    <section id="shops" class="shops">
+        <div class="container">
+            <div class="section-header">
+                <h2>Discover Local Barber Shops</h2>
+                <p>Find and book with professional barbers in your area</p>
+            </div>
+            <div class="shop-search">
+                <div class="search-bar">
+                    <input type="text" placeholder="Enter your location or zip code" id="locationSearch">
+                    <button class="btn btn-primary" onclick="searchShops()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+            <div class="shops-grid" id="shopsGrid">
+                <!-- Shops will be populated here by script.js (loadShopsFromManager) -->
+            </div>
+        </div>
+    </section>
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
