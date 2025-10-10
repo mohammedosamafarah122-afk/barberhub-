@@ -161,6 +161,127 @@
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .modal-header h2 {
+            margin: 0;
+            color: #1a1a1a;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .services-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .services-input input {
+            flex: 1;
+        }
+        .add-service-btn {
+            background: #d4af37;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .service-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .service-item {
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .remove-service {
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .submit-shop-btn {
+            width: 100%;
+            background: #d4af37;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .submit-shop-btn:hover {
+            background: #b8941f;
+        }
     </style>
 </head>
 <body>
@@ -176,7 +297,7 @@
                 <span id="userName">Welcome!</span>
                 <button onclick="handleLogout()" style="background: #d4af37; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Logout</button>
             </div>
-        </div>
+                </div>
             </div>
 
     <div class="main-content">
@@ -190,9 +311,64 @@
         </div>
     </div>
 
-    <button class="add-shop-btn" onclick="addShop()" title="Add Your Shop">
+    <button class="add-shop-btn" onclick="openAddShopModal()" title="Add Your Shop">
         <i class="fas fa-plus"></i>
     </button>
+
+    <!-- Add Shop Modal -->
+    <div class="modal" id="addShopModal">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h2>Create Your Barber Shop</h2>
+                <button class="close-modal" onclick="closeAddShopModal()">&times;</button>
+            </div>
+            <form id="addShopForm" onsubmit="handleAddShop(event); return false;">
+                <div class="form-group">
+                    <label>Shop Name *</label>
+                    <input type="text" name="shopName" required placeholder="e.g., Elite Cuts">
+                </div>
+                
+                <div class="form-group">
+                    <label>Location *</label>
+                    <input type="text" name="location" required placeholder="e.g., Downtown, City Center">
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" placeholder="Tell customers about your shop..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone" placeholder="e.g., +1234567890">
+                </div>
+                
+                <div class="form-group">
+                    <label>Shop Icon (Emoji)</label>
+                    <select name="icon">
+                        <option value="💇‍♂️">💇‍♂️ Haircut</option>
+                        <option value="✂️">✂️ Scissors</option>
+                        <option value="💈">💈 Barber Pole</option>
+                        <option value="🎩">🎩 Gentleman's Hat</option>
+                        <option value="👨‍🦰">👨‍🦰 Barber</option>
+                        <option value="🪒">🪒 Razor</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Services Offered *</label>
+                    <div class="services-input">
+                        <input type="text" id="serviceInput" placeholder="e.g., Haircut, Beard Trim">
+                        <button type="button" class="add-service-btn" onclick="addService()">Add</button>
+                    </div>
+                    <div class="service-list" id="serviceList"></div>
+                    <input type="hidden" name="services" id="servicesHidden">
+                </div>
+                
+                <button type="submit" class="submit-shop-btn">Create Shop</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Load user info
@@ -201,9 +377,96 @@
             document.getElementById('userName').textContent = `Welcome, ${user.name || 'User'}!`;
         }
 
+        // Service management
+        let selectedServices = [];
+
+        function addService() {
+            const input = document.getElementById('serviceInput');
+            const service = input.value.trim();
+            
+            if (service && !selectedServices.includes(service)) {
+                selectedServices.push(service);
+                updateServicesList();
+                input.value = '';
+            }
+        }
+
+        function removeService(service) {
+            selectedServices = selectedServices.filter(s => s !== service);
+            updateServicesList();
+        }
+
+        function updateServicesList() {
+            const serviceList = document.getElementById('serviceList');
+            const servicesHidden = document.getElementById('servicesHidden');
+            
+            serviceList.innerHTML = selectedServices.map(service => `
+                <div class="service-item">
+                    <span>${service}</span>
+                    <button type="button" class="remove-service" onclick="removeService('${service}')">×</button>
+                </div>
+            `).join('');
+            
+            servicesHidden.value = JSON.stringify(selectedServices);
+        }
+
+        // Modal functions
+        function openAddShopModal() {
+            const user = JSON.parse(localStorage.getItem('barberhub_user') || '{}');
+            if (user.role !== 'barber') {
+                alert('Only barber shop owners can add shops. Please sign up as a barber.');
+                return;
+            }
+            document.getElementById('addShopModal').classList.add('active');
+        }
+
+        function closeAddShopModal() {
+            document.getElementById('addShopModal').classList.remove('active');
+            document.getElementById('addShopForm').reset();
+            selectedServices = [];
+            updateServicesList();
+        }
+
+        // Handle shop creation
+        function handleAddShop(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const user = JSON.parse(localStorage.getItem('barberhub_user') || '{}');
+            
+            if (selectedServices.length === 0) {
+                alert('Please add at least one service');
+                return;
+            }
+            
+            const newShop = {
+                id: Date.now(),
+                name: formData.get('shopName'),
+                location: formData.get('location'),
+                description: formData.get('description') || '',
+                phone: formData.get('phone') || '',
+                rating: 5.0,
+                services: selectedServices,
+                image: formData.get('icon'),
+                ownerId: user.id,
+                ownerName: user.name,
+                ownerEmail: user.email
+            };
+            
+            // Save shop to localStorage
+            const shops = JSON.parse(localStorage.getItem('barberhub_shops') || '[]');
+            shops.push(newShop);
+            localStorage.setItem('barberhub_shops', JSON.stringify(shops));
+            
+            alert('Shop created successfully!');
+            closeAddShopModal();
+            loadShops();
+        }
+
         // Load shops
         function loadShops() {
-            const shops = [
+            // Default shops
+            const defaultShops = [
                 {
                     id: 1,
                     name: "Elite Barber Shop",
@@ -238,8 +501,14 @@
                 }
             ];
 
+            // Get user-created shops
+            const userShops = JSON.parse(localStorage.getItem('barberhub_shops') || '[]');
+            
+            // Combine all shops
+            const allShops = [...defaultShops, ...userShops];
+
             const shopsGrid = document.getElementById('shopsGrid');
-            shopsGrid.innerHTML = shops.map(shop => `
+            shopsGrid.innerHTML = allShops.map(shop => `
                 <div class="shop-card" onclick="viewShop(${shop.id})">
                     <div class="shop-image">${shop.image}</div>
                     <div class="shop-info">
@@ -285,15 +554,6 @@
 
         function bookAppointment(shopId) {
             window.location.href = `shop.html?id=${shopId}#booking`;
-        }
-
-        function addShop() {
-            const user = JSON.parse(localStorage.getItem('barberhub_user') || '{}');
-            if (user.role === 'barber') {
-                alert('Add your shop feature coming soon!');
-            } else {
-                alert('Only barber shop owners can add shops. Please sign up as a barber.');
-            }
         }
 
         function handleLogout() {
