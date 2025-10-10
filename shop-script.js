@@ -139,7 +139,12 @@ function updateShopContent() {
     // Update hero section
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
-        heroTitle.textContent = `${currentShop.name} - Professional Barber Services`;
+        heroTitle.textContent = 'Barberhub';
+    }
+
+    const heroSubtitle = document.querySelector('.hero-subtitle');
+    if (heroSubtitle) {
+        heroSubtitle.textContent = currentShop.name;
     }
 
     // Keep original About section headings as designed
