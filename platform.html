@@ -358,6 +358,12 @@
                         <img id="previewImg" src="" alt="Preview" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;border:1px solid #eee">
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label>Gallery Images (up to 8)</label>
+                    <input type="file" name="gallery" accept="image/*" multiple onchange="handleGalleryChange(event)">
+                    <div id="galleryPreview" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:10px"></div>
+                </div>
                 
                 <div class="form-group">
                     <label>Services Offered *</label>
@@ -383,6 +389,7 @@
 
         // Image upload state
         let uploadedImageDataUrl = '';
+        let galleryDataUrls = [];
 
         // Service management
         let selectedServices = [];
@@ -435,6 +442,9 @@
             uploadedImageDataUrl = '';
             const prev = document.getElementById('imagePreview');
             if (prev) prev.style.display = 'none';
+            galleryDataUrls = [];
+            const gprev = document.getElementById('galleryPreview');
+            if (gprev) gprev.innerHTML = '';
         }
 
         // Image upload handler
@@ -457,6 +467,41 @@
             reader.readAsDataURL(file);
         }
 
+        // Gallery upload handler (multiple files)
+        function handleGalleryChange(event) {
+            const files = Array.from(event.target.files || []);
+            if (!files.length) {
+                galleryDataUrls = [];
+                document.getElementById('galleryPreview').innerHTML = '';
+                return;
+            }
+
+            const max = 8;
+            const chosen = files.slice(0, max);
+            galleryDataUrls = [];
+            document.getElementById('galleryPreview').innerHTML = '';
+
+            let remaining = chosen.length;
+            chosen.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const url = e.target.result;
+                    galleryDataUrls.push(url);
+                    const thumb = document.createElement('img');
+                    thumb.src = url;
+                    thumb.alt = 'Gallery image';
+                    thumb.style.width = '110px';
+                    thumb.style.height = '80px';
+                    thumb.style.objectFit = 'cover';
+                    thumb.style.borderRadius = '8px';
+                    thumb.style.border = '1px solid #eee';
+                    document.getElementById('galleryPreview').appendChild(thumb);
+                    remaining--;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
         // Handle shop creation
         function handleAddShop(event) {
             event.preventDefault();
@@ -469,8 +514,8 @@
                 return;
             }
             
-            if (!uploadedImageDataUrl) {
-                alert('Please upload a shop image');
+            if (!uploadedImageDataUrl && galleryDataUrls.length === 0) {
+                alert('Please upload at least one image (cover or gallery)');
                 return;
             }
 
@@ -482,7 +527,8 @@
                 phone: formData.get('phone') || '',
                 rating: 5.0,
                 services: selectedServices,
-                photo: uploadedImageDataUrl,
+                photo: uploadedImageDataUrl || (galleryDataUrls[0] || ''),
+                photos: galleryDataUrls,
                 ownerId: user.id,
                 ownerName: user.name,
                 ownerEmail: user.email
