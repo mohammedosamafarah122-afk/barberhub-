@@ -327,10 +327,11 @@
     <div class="modal" id="addShopModal">
         <div class="modal-content">
             <div class="modal-header">
-            <h2>Create Your Barber Shop</h2>
+            <h2 id="shopModalTitle">Create Your Barber Shop</h2>
                 <button class="close-modal" onclick="closeAddShopModal()">&times;</button>
             </div>
             <form id="addShopForm" onsubmit="handleAddShop(event); return false;">
+                <input type="hidden" id="editingShopId" value="">
                 <div class="form-group">
                     <label>Shop Name *</label>
                     <input type="text" name="shopName" required placeholder="e.g., Elite Cuts">
@@ -375,7 +376,7 @@
                     <input type="hidden" name="services" id="servicesHidden">
                 </div>
                 
-                <button type="submit" class="submit-shop-btn">Create Shop</button>
+                <button type="submit" id="submitShopBtn" class="submit-shop-btn">Create Shop</button>
             </form>
         </div>
     </div>
@@ -390,6 +391,7 @@
         // Image upload state
         let uploadedImageDataUrl = '';
         let galleryDataUrls = [];
+        let editingShopId = null;
 
         // Service management
         let selectedServices = [];
@@ -431,6 +433,57 @@
                 alert('Only barber shop owners can add shops. Please sign up as a barber.');
                 return;
             }
+            // Reset editing state
+            editingShopId = null;
+            document.getElementById('editingShopId').value = '';
+            document.getElementById('shopModalTitle').textContent = 'Create Your Barber Shop';
+            document.getElementById('submitShopBtn').textContent = 'Create Shop';
+            document.getElementById('addShopModal').classList.add('active');
+        }
+
+        function openEditShopModal(shopId) {
+            const user = JSON.parse(localStorage.getItem('barberhub_user') || '{}');
+            const shops = JSON.parse(localStorage.getItem('barberhub_shops') || '[]');
+            const shop = shops.find(s => s.id === shopId && s.ownerId === user.id);
+            if (!shop) { alert('Shop not found or you are not the owner.'); return; }
+
+            editingShopId = shopId;
+            document.getElementById('editingShopId').value = String(shopId);
+            document.getElementById('shopModalTitle').textContent = 'Edit Your Barber Shop';
+            document.getElementById('submitShopBtn').textContent = 'Save Changes';
+
+            // Prefill fields
+            const form = document.getElementById('addShopForm');
+            form.shopName.value = shop.name || '';
+            form.location.value = shop.location || '';
+            form.description.value = shop.description || '';
+            form.phone.value = shop.phone || '';
+
+            // Services
+            selectedServices = Array.isArray(shop.services) ? shop.services.map(s => typeof s === 'string' ? s : (s.name || s)) : [];
+            updateServicesList();
+
+            // Images
+            uploadedImageDataUrl = shop.photo || '';
+            galleryDataUrls = Array.isArray(shop.photos) ? shop.photos.slice() : [];
+            const prevWrap = document.getElementById('imagePreview');
+            const prevImg = document.getElementById('previewImg');
+            if (uploadedImageDataUrl) {
+                prevImg.src = uploadedImageDataUrl;
+                prevWrap.style.display = 'block';
+            } else {
+                prevWrap.style.display = 'none';
+            }
+            const gprev = document.getElementById('galleryPreview');
+            gprev.innerHTML = '';
+            galleryDataUrls.forEach(url => {
+                const thumb = document.createElement('img');
+                thumb.src = url; thumb.alt = 'Gallery image';
+                thumb.style.width = '110px'; thumb.style.height = '80px'; thumb.style.objectFit = 'cover';
+                thumb.style.borderRadius = '8px'; thumb.style.border = '1px solid #eee';
+                gprev.appendChild(thumb);
+            });
+
             document.getElementById('addShopModal').classList.add('active');
         }
 
@@ -534,12 +587,29 @@
                 ownerEmail: user.email
             };
             
-            // Save shop to localStorage
+            // Save or update shop to localStorage
             const shops = JSON.parse(localStorage.getItem('barberhub_shops') || '[]');
-            shops.push(newShop);
+            if (editingShopId) {
+                const idx = shops.findIndex(s => s.id === editingShopId && s.ownerId === user.id);
+                if (idx !== -1) {
+                    const existing = shops[idx];
+                    shops[idx] = {
+                        ...existing,
+                        name: newShop.name,
+                        location: newShop.location,
+                        description: newShop.description,
+                        phone: newShop.phone,
+                        services: selectedServices.length ? selectedServices : existing.services,
+                        photo: newShop.photo || existing.photo,
+                        photos: galleryDataUrls.length ? galleryDataUrls : (existing.photos || [])
+                    };
+                }
+                alert('Shop updated successfully!');
+            } else {
+                shops.push(newShop);
+                alert('Shop created successfully!');
+            }
             localStorage.setItem('barberhub_shops', JSON.stringify(shops));
-            
-            alert('Shop created successfully!');
             closeAddShopModal();
             loadShops();
         }
@@ -589,6 +659,7 @@
             const allShops = [...defaultShops, ...userShops];
 
             const shopsGrid = document.getElementById('shopsGrid');
+            const currentUser = JSON.parse(localStorage.getItem('barberhub_user') || '{}');
             shopsGrid.innerHTML = allShops.map(shop => `
                 <div class="shop-card" onclick="viewShop(${shop.id})">
                     <div class="shop-image">${shop.photo ? `<img src="${shop.photo}" alt="${shop.name}">` : (shop.image || '💈')}</div>
@@ -600,11 +671,12 @@
                             <span>${shop.rating}</span>
                         </div>
                         <div class="shop-services">
-                            ${shop.services.map(service => `<span class="service-tag">${service}</span>`).join('')}
+                            ${shop.services.map(service => `<span class="service-tag">${typeof service === 'string' ? service : (service.name || service)}</span>`).join('')}
                         </div>
                         <div class="shop-actions">
                             <button class="btn-book" onclick="event.stopPropagation(); bookAppointment(${shop.id})">Book Now</button>
                             <button class="btn-view" onclick="event.stopPropagation(); viewShop(${shop.id})">View</button>
+                            ${shop.ownerId && currentUser && shop.ownerId === currentUser.id ? `<button class=\"btn-view\" style=\"border-color:#888;color:#444\" onclick=\"event.stopPropagation(); openEditShopModal(${shop.id})\">Edit</button>` : ''}
                         </div>
                     </div>
                 </div>
