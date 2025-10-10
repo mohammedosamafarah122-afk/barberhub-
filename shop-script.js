@@ -167,6 +167,9 @@ function updateShopContent() {
     // Update services section
     updateServicesSection();
 
+    // Update gallery section
+    updateGallerySection();
+
     // Update contact information
     updateContactInfo();
 
@@ -206,6 +209,33 @@ function updateServicesSection() {
             </div>
         `;
     }).join('');
+}
+
+// Render gallery section
+function updateGallerySection() {
+    const grid = document.getElementById('galleryGrid');
+    if (!grid) return;
+
+    // Prefer photos saved on the shop (from platform create flow)
+    const photos = (currentShop && currentShop.photos && currentShop.photos.length)
+        ? currentShop.photos
+        : [
+            'Screenshot 2025-10-07 182953.png',
+            'Screenshot 2025-10-07 194954.png',
+            'Screenshot 2025-10-07 200903.png',
+            'Screenshot 2025-10-07 201247.png',
+            'Screenshot 2025-10-07 203615.png',
+            'Screenshot 2025-10-07 204517.png'
+        ];
+
+    grid.innerHTML = photos.map(src => `
+        <div class="gallery-item">
+            <img src="${src}" alt="Our work" class="gallery-photo" loading="lazy" onerror="this.onerror=null;this.src='assets/images/gallery/placeholder.svg';" />
+        </div>
+    `).join('');
+
+    // Rebind lightbox to new items
+    setupGalleryLightbox();
 }
 
 // Update contact information
