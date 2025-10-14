@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Test</title>
+    <style>
+        body { font-family: Arial; padding: 50px; background: #f5f5f5; }
+        .form { background: white; padding: 30px; max-width: 400px; margin: 0 auto; border-radius: 10px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #d4af37; color: white; border: none; cursor: pointer; font-size: 16px; }
+        button:hover { background: #b8941f; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 5px; }
+        .success { background: #4CAF50; color: white; }
+        .error { background: #f44336; color: white; }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <h2>Test Sign Up</h2>
+        <input type="text" id="name" placeholder="Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="testSignup()">Sign Up</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function testSignup() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const result = document.getElementById('result');
+
+            if (!name || !email || !password) {
+                result.className = 'result error';
+                result.textContent = 'Please fill all fields';
+                return;
+            }
+
+            // Create user
+            const user = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                role: 'customer'
+            };
+
+            // Save to localStorage
+            const users = JSON.parse(localStorage.getItem('barberhub_users') || '[]');
+            users.push(user);
+            localStorage.setItem('barberhub_users', JSON.stringify(users));
+            localStorage.setItem('barberhub_user', JSON.stringify(user));
+
+            result.className = 'result success';
+            result.textContent = 'Success! Redirecting to discover page...';
+            
+            setTimeout(() => {
+                window.location.href = 'discover.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
+

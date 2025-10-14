@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Auth</title>
+    <style>
+        body { font-family: Arial; padding: 50px; background: #f5f5f5; }
+        .form { background: white; padding: 30px; max-width: 400px; margin: 0 auto; border-radius: 10px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #d4af37; color: white; border: none; cursor: pointer; font-size: 16px; }
+        button:hover { background: #b8941f; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 5px; }
+        .success { background: #4CAF50; color: white; }
+        .error { background: #f44336; color: white; }
+        .info { background: #2196F3; color: white; }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <h2>Debug Auth Test</h2>
+        <div id="debug-info" class="result info">Loading...</div>
+        
+        <h3>Test Login</h3>
+        <input type="email" id="login-email" placeholder="Email" value="mohammedosamafarah122@gmail.com">
+        <input type="password" id="login-password" placeholder="Password" value="password123">
+        <button onclick="testLogin()">Test Login</button>
+        
+        <h3>Test Signup</h3>
+        <input type="text" id="signup-name" placeholder="Name" value="Test User">
+        <input type="email" id="signup-email" placeholder="Email" value="test@example.com">
+        <input type="password" id="signup-password" placeholder="Password" value="password123">
+        <button onclick="testSignup()">Test Signup</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Debug info
+        function updateDebugInfo() {
+            const debug = document.getElementById('debug-info');
+            const users = JSON.parse(localStorage.getItem('barberhub_users') || '[]');
+            const currentUser = localStorage.getItem('barberhub_user');
+            
+            debug.innerHTML = `
+                <strong>Debug Info:</strong><br>
+                Users in storage: ${users.length}<br>
+                Current user: ${currentUser ? 'Logged in' : 'Not logged in'}<br>
+                Users: ${users.map(u => u.email).join(', ')}
+            `;
+        }
+
+        function testLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const result = document.getElementById('result');
+
+            console.log('Testing login with:', email, password);
+
+            if (!email || !password) {
+                result.className = 'result error';
+                result.textContent = 'Please fill all fields';
+                return;
+            }
+
+            // Check if user exists
+            const users = JSON.parse(localStorage.getItem('barberhub_users') || '[]');
+            const user = users.find(u => u.email === email);
+
+            if (user) {
+                // Login successful
+                localStorage.setItem('barberhub_user', JSON.stringify(user));
+                result.className = 'result success';
+                result.textContent = 'Login successful! Redirecting...';
+                updateDebugInfo();
+                
+                setTimeout(() => {
+                    window.location.href = 'discover.html';
+                }, 1000);
+            } else {
+                result.className = 'result error';
+                result.textContent = 'User not found. Try signing up first.';
+            }
+        }
+
+        function testSignup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const result = document.getElementById('result');
+
+            console.log('Testing signup with:', name, email, password);
+
+            if (!name || !email || !password) {
+                result.className = 'result error';
+                result.textContent = 'Please fill all fields';
+                return;
+            }
+
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('barberhub_users') || '[]');
+            if (users.find(u => u.email === email)) {
+                result.className = 'result error';
+                result.textContent = 'Email already registered. Try logging in.';
+                return;
+            }
+
+            // Create user
+            const user = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                role: 'customer'
+            };
+
+            // Save user
+            users.push(user);
+            localStorage.setItem('barberhub_users', JSON.stringify(users));
+            localStorage.setItem('barberhub_user', JSON.stringify(user));
+
+            result.className = 'result success';
+            result.textContent = 'Signup successful! Redirecting...';
+            updateDebugInfo();
+            
+            setTimeout(() => {
+                window.location.href = 'discover.html';
+            }, 1000);
+        }
+
+        // Initialize
+        updateDebugInfo();
+    </script>
+</body>
+</html>
