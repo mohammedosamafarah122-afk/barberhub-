@@ -104,7 +104,7 @@ function applyShopBranding() {
     if (!currentShop) return;
 
     // Update page title
-    document.title = `${currentShop.name} - Professional Barber Services`;
+    document.title = `Barberhub — ${currentShop.name}`;
 
     // Apply color scheme
     const root = document.documentElement;
@@ -113,10 +113,10 @@ function applyShopBranding() {
     root.style.setProperty('--background-color', currentShop.colorScheme.background);
     root.style.setProperty('--text-color', currentShop.colorScheme.text);
 
-    // Update shop name in navigation
+    // Update brand name in navigation
     const navLogo = document.querySelector('.nav-logo span');
     if (navLogo) {
-        navLogo.textContent = currentShop.name;
+        navLogo.textContent = 'Barberhub';
     }
 
     // Update shop logo in navigation
@@ -147,10 +147,10 @@ function updateShopContent() {
         heroSubtitle.textContent = currentShop.name;
     }
 
-    // Keep original About section headings as designed
+    // About section title uses the shop name
     const aboutSectionHeader = document.querySelector('.about .section-header h2');
     if (aboutSectionHeader) {
-        aboutSectionHeader.textContent = 'About Elite Barber';
+        aboutSectionHeader.textContent = `About ${currentShop.name}`;
     }
 
     const aboutSectionSubtitle = document.querySelector('.about .section-header p');
